@@ -16,6 +16,7 @@ cd user-post-viewer
 ```
 2. Install dependencies:
 ```bash
+cd server
 npm install
 ```
 3. Start the server:
