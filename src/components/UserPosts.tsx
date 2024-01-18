@@ -24,7 +24,7 @@ const UserPosts: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [OpenModal, setOpenModal] = useState<boolean>(false);
   const [Liked, setLiked] = useState<{ [key: number]: boolean } >({});
-  const [PostComments, setPostComments] = useState<Comment[]>([]);
+  const [PostComments, setPostComments] = useState<number>(1);
 
 
   // Getting liked post
@@ -54,15 +54,9 @@ const UserPosts: React.FC = () => {
         }
 
         const data = await response.json();
-        
-        const postsWithComments = await Promise.all(
-          data.map(async (post : any) => {
-            const commentCount = await fetchCommentsCount(post.id);
-            return { ...post, commentCount };
-          })
-        );
+
         setLoading(false);
-        setPosts(postsWithComments);
+        setPosts(data);
       } catch (error) {
         console.error('Error fetching posts:', error);
         setError('Failed to fetch posts. Please try again later.');
@@ -73,16 +67,6 @@ const UserPosts: React.FC = () => {
   }, [userId]);
 
 
-  const fetchCommentsCount = async (postId: number) => {
-    try {
-      const response = await fetch(`http://localhost:4000/comment/post/${postId}`);
-      const data = await response.json();
-      return data
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-      return 0;
-    }
-  };
 
   if(loading){
     return(
@@ -120,7 +104,7 @@ const UserPosts: React.FC = () => {
   }
 
   return (
-     <div className="user-list-container post_container" style={{height:"110vh"}} >
+     <div className="user-list-container post_container" >
      {error ? (
        <p className="error-message">{error}</p>
      ) : (
@@ -130,8 +114,8 @@ const UserPosts: React.FC = () => {
            {posts?.map((post) => {
 
             return(
-              <li key={post.id} className="user-item"  >
-              <div className="user-link">
+              <li key={post.id} className="user-item post-item"  >
+              <div className="user-link post_links">
                 <div className="user-details user_post">
                  <div>
                   <p className="user-name">{post.title}</p>
@@ -140,7 +124,7 @@ const UserPosts: React.FC = () => {
                   <div className='post_comment' >
                  
                  {
-                  Liked[post.id]?
+                  Liked && Liked[post.id]?
                     <svg  onClick={()=>handleUnlikedLiked(post.id)} xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="red" className="bi bi-heart-fill" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
                   </svg>:
@@ -152,7 +136,7 @@ const UserPosts: React.FC = () => {
                 
                   <svg onClick={()=>{
                     setOpenModal(true)
-                    setPostComments(post?.commentCount)
+                    setPostComments(post.id)
                     }} xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" className="bi bi-chat-left-dots" viewBox="0 0 16 16">
                     <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                     <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>

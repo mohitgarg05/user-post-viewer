@@ -52,23 +52,6 @@ app.get('/posts/:userId', (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
-// Fetch post details and comments
-app.get('/post/:postId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const postId = req.params.postId;
-    try {
-        const [postResponse, commentsResponse] = yield Promise.all([
-            axios_1.default.get(`https://jsonplaceholder.typicode.com/posts/${postId}`),
-            axios_1.default.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
-        ]);
-        const post = postResponse.data;
-        const comments = commentsResponse.data;
-        res.status(201).json({ post, comments });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}));
 app.get('/comment/post/:postId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.params.postId;
     try {

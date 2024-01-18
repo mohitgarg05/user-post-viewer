@@ -48,7 +48,6 @@ app.get('/comment/post/:postId', async (req: Request, res: Response) => {
  
   const postId = req.params.postId;
   try {
-
     const response = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
 
     res.status(201).json(response.data);

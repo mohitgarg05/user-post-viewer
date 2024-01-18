@@ -69,6 +69,11 @@ h2 {
   background-color: white;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+.post-item{
+  height: 22vh;
+  padding: 10px !important;
+
+}
 
 .view_button{
   width: 50%;
@@ -180,6 +185,9 @@ h2 {
 
 .user_post{
   justify-content: space-between;
+  height: 100%;
+}
+.post_links{
   height: 100%;
 }
 .user_post p{
