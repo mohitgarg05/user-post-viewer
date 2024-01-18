@@ -120,11 +120,11 @@ const UserPosts: React.FC = () => {
   }
 
   return (
-     <div className="user-list-container post_container" >
+     <div className="user-list-container post_container" style={{height:"110vh"}} >
      {error ? (
        <p className="error-message">{error}</p>
      ) : (
-       <div className='user_card_container'>
+       <div className='user_card_container' >
         <h2>Your Posts</h2>
          <ul className="user-list">
            {posts?.map((post) => {
