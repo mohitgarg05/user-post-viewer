@@ -26,11 +26,14 @@ app.use((0, cors_1.default)());
 // Define routes
 // Fetch users
 app.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const page = parseInt(req.query.page, 10) || 1; // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit, 10) || 4; // Default to limit of 5 if not provided
     try {
-        console.log("ansdjasd");
         const response = yield axios_1.default.get('https://jsonplaceholder.typicode.com/users');
-        console.log(response.data);
-        res.status(201).send(response.data);
+        const users = response.data.slice((page - 1) * limit, page * limit);
+        const totalUsers = response.data.length;
+        const calculatedTotalPages = Math.ceil(totalUsers / limit);
+        res.status(200).json({ users, totalPages: calculatedTotalPages });
     }
     catch (error) {
         console.error(error);
@@ -66,6 +69,17 @@ app.get('/post/:postId', (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
+app.get('/comment/post/:postId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const postId = req.params.postId;
+    try {
+        const response = yield axios_1.default.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`);
+        res.status(201).json(response.data);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}));
 // Handle 404 - Route not found
 app.use((req, res) => {
     res.status(404).json({ error: 'Route not found' });
@@ -76,6 +90,7 @@ app.use((err, req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
 });
 // Start the server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+exports.default = server;

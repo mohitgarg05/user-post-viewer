@@ -16,17 +16,23 @@ app.use(cors());
 
 // Fetch users
 app.get('/users', async (req: Request, res: Response) => {
+  const page = parseInt(req.query.page as string, 10) || 1; // Default to page 1 if not provided
+  const limit = parseInt(req.query.limit as string, 10) || 4; // Default to limit of 5 if not provided
+
   try {
     const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-    res.status(201).send(response.data);
+    const users = response.data.slice((page - 1) * limit, page * limit);
+    const totalUsers = response.data.length;
+    const calculatedTotalPages = Math.ceil(totalUsers / limit);
+    res.status(200).json({ users, totalPages: calculatedTotalPages });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 // Fetch posts for a user
 app.get('/posts/:userId', async (req: Request, res: Response) => {
+
   const userId = req.params.userId;
   try {
     const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
@@ -37,19 +43,15 @@ app.get('/posts/:userId', async (req: Request, res: Response) => {
   }
 });
 
-// Fetch post details and comments
-app.get('/post/:postId', async (req: Request, res: Response) => {
+
+app.get('/comment/post/:postId', async (req: Request, res: Response) => {
+ 
   const postId = req.params.postId;
   try {
-    const [postResponse, commentsResponse] = await Promise.all([
-      axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`),
-      axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
-    ]);
 
-    const post = postResponse.data;
-    const comments = commentsResponse.data;
+    const response = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
 
-    res.status(201).json({ post, comments });
+    res.status(201).json(response.data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -68,6 +70,8 @@ app.use((err: Error, req: Request, res: Response) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default server;

@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserList from './components/UserList';
 import UserPosts from './components/UserPosts';
-import PostDetails from './components/PostDetails';
 
 const App: React.FC = () => {
   return (
@@ -14,9 +13,6 @@ const App: React.FC = () => {
 
         {/* User Posts Screen */}
         <Route path="/user/:userId" element={<UserPosts />} />
-
-        {/* Post Details Screen */}
-        <Route path="/post/:postId" element={<PostDetails />} />
 
         {/* Default Route */}
         <Route path="/" element={<UserList />} />
