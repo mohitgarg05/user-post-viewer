@@ -23,6 +23,10 @@ npm install
 ```bash
 npm start
 ```
+4. To Start frontend go to the root directory :
+```bash
+npm start
+```
 # API Endpoints
 
 #### Endpoint: GET /users
