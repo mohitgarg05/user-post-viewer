@@ -43,7 +43,7 @@ app.get('/posts/:userId', async (req: Request, res: Response) => {
   }
 });
 
-
+// Fetch comments for a post
 app.get('/comment/post/:postId', async (req: Request, res: Response) => {
  
   const postId = req.params.postId;
