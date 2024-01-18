@@ -45,3 +45,20 @@ npm start
 
 # External APIs
 The backend interacts with the  [JSONPlaceholder](https://jsonplaceholder.typicode.com/) API for sample data.
+
+
+# Architecture
+User Post Viewer follows a **RESTful API** architecture, which is designed to provide a scalable and modular approach for building web services. The architecture is structured into the following main components:
+
+#### 1. Express Server (Backend)
+
+The backend of the application is built using the Express framework. It handles incoming HTTP requests, defines routes, and manages responses. Key components and their responsibilities include:
+
+- **API Routes**: Define routes for fetching users, posts, and comments.
+- **Middleware**: Utilizes middleware functions to parse JSON and enable Cross-Origin Resource Sharing (CORS).
+
+#### 2. Frontend
+The frontend of the application is responsible for user interface, user interactions. It is built using ReactJs(Typescript). Key components and their responsibilities include:
+
+* **UserList** : List of users is displayed in this component 
+* **UserPost** : List of Post of specific user is displayed in this component along with the comments on that post
